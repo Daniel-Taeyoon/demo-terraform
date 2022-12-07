@@ -31,3 +31,4 @@ This was fragile, because the resource instances were still identified by their 
 ### 참고
 - Terraform Configuration Language : https://developer.hashicorp.com/terraform/language/resources
 - How to Build AWS VPC using Terraform : https://spacelift.io/blog/terraform-aws-vpc
+- [Ubuntu] AWS EC2 AMI List : https://cloud-images.ubuntu.com/locator/ec2/ 
