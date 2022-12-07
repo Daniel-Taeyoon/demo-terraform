@@ -1,6 +1,9 @@
 # Terraform Guide 문서
 terraform init 실행한 디렉토리 구조를 기본으로 변수 선언 및 리소스 값들이 설정된다.
 
+## AWS Infra Architecture
+![image](https://user-images.githubusercontent.com/30804139/206130106-67952e36-363e-4834-9b06-32798f21b8fe.png)
+
 ## Terraform Language
 
 - count
