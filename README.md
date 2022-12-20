@@ -28,6 +28,10 @@ This was fragile, because the resource instances were still identified by their 
 
 => 인스턴스 or 리소스에 구분 값을 count.index로 하는 것은 지양한다.
 
+## Code Structure Example
+"Large-size infrastructure with Terraform" 기준으로 코드 작성.  
+참고 : https://www.terraform-best-practices.com/examples/terraform/large-size-infrastructure-with-terraform
+
 ### 참고
 - Terraform Configuration Language : https://developer.hashicorp.com/terraform/language/resources
 - How to Build AWS VPC using Terraform : https://spacelift.io/blog/terraform-aws-vpc
