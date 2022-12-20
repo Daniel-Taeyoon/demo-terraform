@@ -29,7 +29,30 @@ This was fragile, because the resource instances were still identified by their 
 => 인스턴스 or 리소스에 구분 값을 count.index로 하는 것은 지양한다.
 
 ## Code Structure Example
-"Large-size infrastructure with Terraform" 기준으로 코드 작성.  
+- "Large-size infrastructure with Terraform" 기준으로 코드 작성.  
+- 디렉토리 구조는 아래와 같다.
+  - 인프라별(ex. 1-Network, 2-IAM ...) 분리
+    - "1-Network", "2-IAM" .. 등 인프라 명칭에 따라 기능을 분리한다.
+    - 환경별(dev, stg, prd) 디렉토리를 분리한 이유는 AWS CLI Profile이 다르고, 입력해야 할 변수가 다르기 때문이다.
+  - modules
+    - 환경은 다르더라도 전체적인 인프라 로직은 거의 동일하다.
+    - 모듈로 분리함으로써 중복 코드를 최소화 한다.
+```
+├── 1-Network
+│   ├─ dev
+│   ├─ prd
+│   └─ stg
+│
+├── 2-IAM
+│   ├─ dev
+│   ├─ stg
+│   ├─ prd
+│
+├── modules
+│   ├─ iam-user
+│   ├─ network
+│
+```
 참고 : https://www.terraform-best-practices.com/examples/terraform/large-size-infrastructure-with-terraform
 
 ### 참고
