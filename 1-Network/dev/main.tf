@@ -15,6 +15,8 @@ module "aws_network" {
 
   ecs_subnet_cidrs = ["10.12.24.0/24", "10.12.32.0/24"]
 
-  data_subnet_cidrs = ["10.12.36.0/24", "10.12.40.0/24"]
+  data_subnet_cidrs = ["10.12.38.0/24", "10.12.40.0/24"]
+
+  azs = ["ap-northeast-2a", "ap-northeast-2c"]
 
 }

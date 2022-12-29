@@ -27,3 +27,9 @@ variable "data_subnet_cidrs" {
   description = "Data Subnet CIDR values"
   default     = [""]
 }
+
+variable "azs" {
+  type        = list(string)
+  description = "Availability Zone"
+  default     = [""]
+}

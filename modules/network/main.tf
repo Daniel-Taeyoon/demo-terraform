@@ -5,7 +5,7 @@ resource "aws_vpc" "this" {
   cidr_block = var.cidr_block
   enable_dns_hostnames = true
   tags = {
-    Name = "vpc-tf-daniel"
+    Name = "vpc-dev-dex"
   }
 }
 
@@ -19,8 +19,9 @@ resource "aws_subnet" "sbn-tf-daniel-public" {
   count = length(var.public_subnet_cidrs) # length(var.public_subnet_cidrs) 길이만큼 리소스를 생성하라는 의미이다.
   vpc_id = aws_vpc.this.id
   cidr_block = element(var.public_subnet_cidrs, count.index )
+  availability_zone = element(var.azs, count.index )
   tags = {
-    Name = "sbn-tf-daniel-public-${count.index + 1}"
+    Name = "sbn-dev-an2-dex-public-${count.index + 1}"
   }
 
   depends_on = [
@@ -32,8 +33,24 @@ resource "aws_subnet" "sbn-tf-daniel-ecs" {
   count = length(var.ecs_subnet_cidrs)
   vpc_id = aws_vpc.this.id
   cidr_block = element(var.ecs_subnet_cidrs, count.index )
+  availability_zone = element(var.azs, count.index )
   tags = {
-    Name = "sbn-tf-daniel-ecs-${count.index + 1}"
+    Name = "sbn-dev-an2-dex-ecs-${count.index + 1}"
+  }
+
+  depends_on = [
+    aws_vpc.this
+  ]
+}
+
+resource "aws_subnet" "sbn-tf-daniel-data" {
+  count = length(var.data_subnet_cidrs)
+  vpc_id = aws_vpc.this.id
+  cidr_block = element(var.data_subnet_cidrs, count.index )
+  availability_zone = element(var.azs, count.index )
+  tags = {
+#    Name = format("sbn-dev-an2-dex-data-${regex("ap-northeast-2\\[a-z]", var.azs)}")
+    Name = "sbn-dev-an2-dex-data-${count.index + 1}"
   }
 
   depends_on = [
@@ -44,7 +61,7 @@ resource "aws_subnet" "sbn-tf-daniel-ecs" {
 resource "aws_internet_gateway" "igw-tf-daniel" {
   vpc_id = aws_vpc.this.id
   tags = {
-    Name = "igw-tf-daniel"
+    Name = "igw-dev-dex"
   }
 }
 
@@ -62,7 +79,7 @@ resource "aws_route_table" "rt-vpc" {
     gateway_id = aws_internet_gateway.igw-tf-daniel.id
   }
   tags = {
-    Name = "rt-vpc-tf-daniel"
+    Name = "rt-dev-an2-dex-vpc"
   }
   depends_on = [
     aws_internet_gateway.igw-tf-daniel
@@ -77,14 +94,16 @@ resource "aws_route_table" "rt-subnet-public" {
     gateway_id = aws_internet_gateway.igw-tf-daniel.id
   }
   tags = {
-    Name = "rt-sbn-tf-daniel-public"
+    Name = "rt-dev-an2-dex-public"
   }
   depends_on = [
     aws_internet_gateway.igw-tf-daniel
   ]
 }
 
-# 생성한 Route Table("rt-vpc-tf-daniel")을 public 서브넷에 그대로 적용
+# 생성한 Route Table을 Public Subnet에 적용
+# TODO : Private, ECS Subnet을 위한 Route Table 필요
+# - (선제조건으로 NAT 생성 후 해당 NAT를 기반으로 Route Table 매핑이 필요하다)
 resource "aws_route_table_association" "rt-sbn-tf-daniel-public" {
   count = length(var.public_subnet_cidrs)
   subnet_id = element(aws_subnet.sbn-tf-daniel-public[*].id, count.index)
