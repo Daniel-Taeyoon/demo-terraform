@@ -1,6 +1,6 @@
 provider "aws" {
-  region = "ap-southeast-1"
-  profile = "PRD"
+  region = "ap-northeast-2"
+  profile = "PRD-DEX"
 }
 
 #########################################

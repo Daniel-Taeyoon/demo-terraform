@@ -1,6 +1,6 @@
 provider "aws" {
   region = "ap-northeast-2"
-  profile = "STG"
+  profile = "STG-DEX"
 }
 
 #########################################
