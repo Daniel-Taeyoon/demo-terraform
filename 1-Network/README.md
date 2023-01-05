@@ -5,5 +5,7 @@
 
 **Goals**  
 - [x] Network망 구축 : VPC, Subnet(Public, ECS, DB)
-- [x] Internet Gateway, Route Table(Public, ECS, DB)
-- [ ] NAT(Public Subnet)
+- [x] Internet Gateway
+- [x] Route Table(Public, ECS, DB)
+- [ ] Elastic IP
+- [ ] NAT(Public Subnet에 생성)
