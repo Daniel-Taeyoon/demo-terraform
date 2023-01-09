@@ -33,15 +33,14 @@ This was fragile, because the resource instances were still identified by their 
 - 디렉토리 구조는 아래와 같다.
   - 인프라별(ex. 1-Network, 2-IAM ...) 분리
     - "1-Network", "2-IAM" .. 등 인프라 명칭에 따라 기능을 분리한다.
-    - 환경별(dev, stg, prd) 디렉토리를 분리한 이유는 AWS CLI Profile이 다르고, 입력해야 할 변수가 다르기 때문이다.
+    - ~~환경별(dev, stg, prd) 디렉토리를 분리한 이유는 AWS CLI Profile이 다르고, 입력해야 할 변수가 다르기 때문이다.~~
+      => terraform workspace로 분리. develop(DEV), stage(STG), main(PRD) 환경에 따라 매개변수를 다르게 주입한다. 
   - modules
     - 환경은 다르더라도 전체적인 인프라 로직은 거의 동일하다.
     - 모듈로 분리함으로써 중복 코드를 최소화 한다.
 ```
 ├── 1-Network
-│   ├─ dev
-│   ├─ prd
-│   └─ stg
+│   ├─ main.tf
 │
 ├── 2-IAM
 │   ├─ dev
