@@ -72,3 +72,12 @@ variable "azs" {
   }
 }
 
+variable "dex_region" {
+  type = map(string)
+  default = {
+    "develop" : "ap-northeast-2"
+    "stage" : "ap-northeast-2"
+    "main" : "ap-southeast-1"
+  }
+}
+
