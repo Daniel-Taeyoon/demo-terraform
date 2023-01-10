@@ -28,6 +28,10 @@ This was fragile, because the resource instances were still identified by their 
 
 => 인스턴스 or 리소스에 구분 값을 count.index로 하는 것은 지양한다.
 
+- tags  
+AWS Resource를 구분하기 위한 Key, Value 값을 셋팅하는 것이다.
+
+
 ## Code Structure Example
 - "Large-size infrastructure with Terraform" 기준으로 코드 작성.  
 - 디렉토리 구조는 아래와 같다.
@@ -62,6 +66,7 @@ workspace를 활용해 환경별로 분리된 상태와 인프라 소스코드�
 
 _참고_
 - Terraform Configuration Language : https://developer.hashicorp.com/terraform/language/resources
+- Terraform Configuration Language(tags) : https://developer.hashicorp.com/terraform/tutorials/aws/aws-default-tags
 - How to Build AWS VPC using Terraform : https://spacelift.io/blog/terraform-aws-vpc
 - [Ubuntu] AWS EC2 AMI List : https://cloud-images.ubuntu.com/locator/ec2/
 - Github terraform-aws-iam : https://github.com/terraform-aws-modules/terraform-aws-iam/tree/v5.9.2
