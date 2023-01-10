@@ -60,7 +60,7 @@ workspace를 활용해 환경별로 분리된 상태와 인프라 소스코드�
 - 환경별로 다른 configuration file을 관리 할 수 있다.
 - workspace는 환경별로 분리 및 독립 될 수 있다.
 
-### 참고
+_참고_
 - Terraform Configuration Language : https://developer.hashicorp.com/terraform/language/resources
 - How to Build AWS VPC using Terraform : https://spacelift.io/blog/terraform-aws-vpc
 - [Ubuntu] AWS EC2 AMI List : https://cloud-images.ubuntu.com/locator/ec2/
