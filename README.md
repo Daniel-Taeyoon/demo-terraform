@@ -4,6 +4,11 @@ terraform init 실행한 디렉토리 구조를 기본으로 변수 선언 및 �
 ## AWS Infra Architecture
 ![image](https://user-images.githubusercontent.com/30804139/206130106-67952e36-363e-4834-9b06-32798f21b8fe.png)
 
+## Prerequisites  
+- AWS CLI와 Terraform 환경이 설치되어 있어야 한다.
+  - install Terraform : https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli
+  - install AWS CLI : https://docs.aws.amazon.com/ko_kr/cli/latest/userguide/getting-started-install.html
+
 ## Terraform Language
 
 - count
