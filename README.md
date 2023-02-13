@@ -63,7 +63,7 @@ AWS Resource를 구분하기 위한 Key, Value 값을 셋팅하는 것이다.
 ```
 참고 : https://www.terraform-best-practices.com/examples/terraform/large-size-infrastructure-with-terraform
 
-# Terraform Workspace
+## Terraform Workspace
 workspace를 활용해 환경별로 분리된 상태와 인프라 소스코드를 관리 할 수 있다.  
 주요 기능으로는
 - 환경별로 다른 configuration file을 관리 할 수 있다.
