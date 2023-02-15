@@ -24,11 +24,10 @@ provider "aws" {
 # tags를 활용해 리소스를 구분한다.
 # ECS - Task Definition, Service 연결 시 아래 tags와 data를 활용해 리소스를 연결시킬 수 있다.
 resource "aws_ecr_repository" "this" {
-  name = "tf-daniel-ecr"
+  name = "tf-demo-devops"
   force_delete = false
   image_tag_mutability = "MUTABLE"
   tags = {
-    Environment = "DEX"
     Terraform_TEST = "True"
   }
 }
