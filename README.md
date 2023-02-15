@@ -33,8 +33,7 @@ This was fragile, because the resource instances were still identified by their 
 
 => 인스턴스 or 리소스에 구분 값을 count.index로 하는 것은 지양한다.
 
-- tags  
-AWS Resource를 구분하기 위한 Key, Value 값을 셋팅하는 것이다.
+- tags : AWS Resource를 구분하기 위한 Key, Value 값을 셋팅하는 것이다.
 
 
 ## Code Structure Example
