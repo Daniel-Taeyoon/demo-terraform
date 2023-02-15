@@ -40,9 +40,9 @@ resource "aws_ecs_task_definition" "this" {
   requires_compatibilities = ["FARGATE"]
   network_mode             = "awsvpc"
   cpu                      = 1024
-  memory                   = 2048
+  memory                   = 3072
   runtime_platform {
-    operating_system_family = "LINUX"
+    operating_system_family = "LINUX/X86_64"
   }
   task_role_arn = "arn:aws:iam::677001239926:role/ecsTaskExecutionRole"
   execution_role_arn = "arn:aws:iam::677001239926:role/ecsTaskExecutionRole"
@@ -50,8 +50,8 @@ resource "aws_ecs_task_definition" "this" {
   container_definitions = <<EOF
   [
     {
-        "name": "demo-devops",
-        "image": "677001239926.dkr.ecr.ap-northeast-2.amazonaws.com/demo-devops:latest",
+        "name": "tf-demo-devops",
+        "image": "677001239926.dkr.ecr.ap-northeast-2.amazonaws.com/tf-demo-devops:latest",
         "cpu": 0,
         "portMappings": [
             {
@@ -69,7 +69,7 @@ resource "aws_ecs_task_definition" "this" {
         "logConfiguration": {
             "logDriver": "awslogs",
             "options": {
-                "awslogs-group": "/ecs/${aws_cloudwatch_log_group.this.name}",
+                "awslogs-group": "${aws_cloudwatch_log_group.this.name}",
                 "awslogs-region": "${var.dex_region[terraform.workspace]}",
                 "awslogs-stream-prefix": "ecs"
             }
@@ -79,12 +79,59 @@ resource "aws_ecs_task_definition" "this" {
   EOF
 }
 
-resource "aws_lb_target_group" "tf-demo-devops" {
-  name        = "tg-tf-demo-devops-service"
-  port        = 80
-  protocol    = "HTTP"
-  vpc_id      = "vpc-0c44b74eb20c95b74"
+resource "aws_security_group" "tf-demo-devops-sg" {
+  vpc_id = "vpc-0c44b74eb20c95b74"
+  name = "scg-tf-demo-devops"
+  ingress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+
+resource "aws_alb" "tf-demo-devops-alb" {
+  name = "tf-demo-devops-alb"
+  security_groups = [aws_security_group.tf-demo-devops-sg.id]
+  subnets = ["subnet-09b8f2f9491842db6", "subnet-0dfcf2ca4e720e287"]
+  tags = {
+    Terraform_TEST = "True"
+  }
+}
+
+resource "aws_alb_listener" "tf-demo-devops-http" {
+  load_balancer_arn = aws_alb.tf-demo-devops-alb.arn
+  port = "80"
+  protocol = "HTTP"
+
+  default_action {
+    type = "forward"
+    target_group_arn = aws_alb_target_group.tf-demo-devops-tg.arn
+  }
+}
+
+
+resource "aws_alb_target_group" "tf-demo-devops-tg" {
+  name     = "tf-demo-devops-tg"
+  port     = 8080
+  protocol = "HTTP"
   target_type = "ip"
+  vpc_id   = "vpc-0c44b74eb20c95b74" // Replace with your VPC ID
+
+  health_check {
+    path     = "/testApi"
+    protocol = "HTTP"
+  }
+
+  tags = {
+    Terraform_TEST = "True"
+  }
+}
+
+resource "aws_alb_target_group_attachment" "tf-demo-devops-alb-attach" {
+  target_group_arn = aws_alb_target_group.tf-demo-devops-tg.arn
+#  port             = 80
+  target_id = aws_ecs_service.this.id
 }
 
 resource "aws_ecs_service" "this" {
@@ -100,8 +147,8 @@ resource "aws_ecs_service" "this" {
   }
 
   load_balancer {
-    target_group_arn = aws_lb_target_group.tf-demo-devops.id
-    container_name = "demo-devops"
+    target_group_arn = aws_alb_target_group.tf-demo-devops-tg.id
+    container_name = "tf-demo-devops"
     container_port = 8080
   }
 
