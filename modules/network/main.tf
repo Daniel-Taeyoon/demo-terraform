@@ -5,7 +5,7 @@ resource "aws_vpc" "this" {
   cidr_block = var.cidr_block[terraform.workspace]
   enable_dns_hostnames = true
   tags = {
-    Name = "vpc-${var.environment_lower[terraform.workspace]}-dex"
+    Name = "vpc-${var.environment_lower[terraform.workspace]}-demo-devops"
   }
 }
 
@@ -20,8 +20,8 @@ resource "aws_subnet" "sbn-tf-daniel-public" {
   cidr_block = element(var.public_subnet_cidrs[terraform.workspace], count.index )
   availability_zone = element(var.azs[terraform.workspace], count.index )
   tags = {
-    Name = "sbn-${var.environment_lower[terraform.workspace]}-an2-dex-public-${
-      replace(element(var.azs[terraform.workspace], count.index), var.dex_region[terraform.workspace], "")
+    Name = "sbn-${var.environment_lower[terraform.workspace]}-an2-demo-devops-public-${
+      replace(element(var.azs[terraform.workspace], count.index), var.demo_devops_region[terraform.workspace], "")
     }"
   }
 
@@ -36,8 +36,8 @@ resource "aws_subnet" "sbn-tf-daniel-ecs" {
   cidr_block = element(var.ecs_subnet_cidrs[terraform.workspace], count.index )
   availability_zone = element(var.azs[terraform.workspace], count.index )
   tags = {
-    Name = "sbn-${var.environment_lower[terraform.workspace]}-an2-dex-ecs-${
-      replace(element(var.azs[terraform.workspace], count.index), var.dex_region[terraform.workspace], "")
+    Name = "sbn-${var.environment_lower[terraform.workspace]}-an2-demo-devops-ecs-${
+      replace(element(var.azs[terraform.workspace], count.index), var.demo_devops_region[terraform.workspace], "")
     }"
   }
 
@@ -52,8 +52,8 @@ resource "aws_subnet" "sbn-tf-daniel-data" {
   cidr_block = element(var.data_subnet_cidrs[terraform.workspace], count.index )
   availability_zone = element(var.azs[terraform.workspace], count.index )
   tags = {
-    Name = "sbn-${var.environment_lower[terraform.workspace]}-an2-dex-data-${
-      replace(element(var.azs[terraform.workspace], count.index), var.dex_region[terraform.workspace], "")
+    Name = "sbn-${var.environment_lower[terraform.workspace]}-an2-demo-devops-data-${
+      replace(element(var.azs[terraform.workspace], count.index), var.demo_devops_region[terraform.workspace], "")
     }"
   }
 
@@ -65,7 +65,7 @@ resource "aws_subnet" "sbn-tf-daniel-data" {
 resource "aws_internet_gateway" "igw-tf-daniel" {
   vpc_id = aws_vpc.this.id
   tags = {
-    Name = "igw-${var.environment_lower[terraform.workspace]}-dex"
+    Name = "igw-${var.environment_lower[terraform.workspace]}-demo-devops"
   }
 }
 
@@ -75,7 +75,7 @@ resource "aws_eip" "nat_eip" {
   vpc   = true
 
   tags = {
-    Name = "eip-${var.environment_lower[terraform.workspace]}-an2-dex-nat"
+    Name = "eip-${var.environment_lower[terraform.workspace]}-an2-demo-devops-nat"
   }
 
   lifecycle {
@@ -88,7 +88,7 @@ resource "aws_nat_gateway" "nat-tf-daniel" {
   subnet_id = aws_subnet.sbn-tf-daniel-public[0].id
 
   tags = {
-    Name = "nat-${var.environment_lower[terraform.workspace]}-an2-dex"
+    Name = "nat-${var.environment_lower[terraform.workspace]}-an2-demo-devops"
   }
 
   depends_on = [aws_internet_gateway.igw-tf-daniel]
@@ -104,7 +104,7 @@ resource "aws_route_table" "rt-vpc" {
     gateway_id = aws_internet_gateway.igw-tf-daniel.id
   }
   tags = {
-    Name = "rt-${var.environment_lower[terraform.workspace]}-an2-dex-vpc"
+    Name = "rt-${var.environment_lower[terraform.workspace]}-an2-demo-devops-vpc"
   }
   depends_on = [
     aws_internet_gateway.igw-tf-daniel
@@ -120,7 +120,7 @@ resource "aws_route_table" "rt-subnet-public" {
     gateway_id = aws_internet_gateway.igw-tf-daniel.id
   }
   tags = {
-    Name = "rt-${var.environment_lower[terraform.workspace]}-an2-dex-public"
+    Name = "rt-${var.environment_lower[terraform.workspace]}-an2-demo-devops-public"
   }
   depends_on = [
     aws_internet_gateway.igw-tf-daniel
@@ -135,7 +135,7 @@ resource "aws_route_table" "rt-subnet-ecs" {
     gateway_id = aws_nat_gateway.nat-tf-daniel.id
   }
   tags = {
-    Name = "rt-${var.environment_lower[terraform.workspace]}-an2-dex-ecs"
+    Name = "rt-${var.environment_lower[terraform.workspace]}-an2-demo-devops-ecs"
   }
   depends_on = [
     aws_internet_gateway.igw-tf-daniel
@@ -150,7 +150,7 @@ resource "aws_route_table" "rt-subnet-data" {
     gateway_id = aws_nat_gateway.nat-tf-daniel.id
   }
   tags = {
-    Name = "rt-${var.environment_lower[terraform.workspace]}-an2-dex-data"
+    Name = "rt-${var.environment_lower[terraform.workspace]}-an2-demo-devops-data"
   }
   depends_on = [
     aws_internet_gateway.igw-tf-daniel

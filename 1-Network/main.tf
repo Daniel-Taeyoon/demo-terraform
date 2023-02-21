@@ -1,4 +1,4 @@
-variable "dex_region" {
+variable "demo_devops_region" {
   type = map(string)
   default = {
     "develop" : "ap-northeast-2"
@@ -19,8 +19,8 @@ variable "aws_profile" {
 # AWS Profile. 즉, AWS CLI에 셋팅되어 있는 Profile 환경 값을 설정한다.
 # Profile에 따라 인프라가 적용되는 환경이 다르니 terraform plan을 통해 확인 후 적용(apply)하자
 provider "aws" {
-  region = var.dex_region[terraform.workspace]
-  profile = "${var.aws_profile[terraform.workspace]}-DEX"
+  region = var.demo_devops_region[terraform.workspace]
+  profile = "${var.aws_profile[terraform.workspace]}-demo-devops"
 }
 
 #########################################

@@ -1,4 +1,4 @@
-variable "dex_region" {
+variable "demo_devops_region" {
   type = map(string)
   default = {
     "develop" : "ap-northeast-2"
@@ -22,7 +22,7 @@ variable "serviceName" {
 }
 
 provider "aws" {
-  region = var.dex_region[terraform.workspace]
+  region = var.demo_devops_region[terraform.workspace]
   profile = "${var.aws_profile[terraform.workspace]}-${var.serviceName}"
 }
 
@@ -70,7 +70,7 @@ resource "aws_ecs_task_definition" "this" {
             "logDriver": "awslogs",
             "options": {
                 "awslogs-group": "/ecs/${aws_cloudwatch_log_group.this.name}",
-                "awslogs-region": "${var.dex_region[terraform.workspace]}",
+                "awslogs-region": "${var.demo_devops_region[terraform.workspace]}",
                 "awslogs-stream-prefix": "ecs"
             }
         }

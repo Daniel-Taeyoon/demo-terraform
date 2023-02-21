@@ -72,7 +72,7 @@ variable "azs" {
   }
 }
 
-variable "dex_region" {
+variable "demo_devops_region" {
   type = map(string)
   default = {
     "develop" : "ap-northeast-2"
