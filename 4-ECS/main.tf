@@ -42,7 +42,7 @@ resource "aws_ecs_task_definition" "this" {
   cpu                      = 1024
   memory                   = 3072
   runtime_platform {
-    operating_system_family = "LINUX/X86_64"
+    operating_system_family = "LINUX"
   }
   task_role_arn = "arn:aws:iam::677001239926:role/ecsTaskExecutionRole"
   execution_role_arn = "arn:aws:iam::677001239926:role/ecsTaskExecutionRole"
@@ -120,7 +120,6 @@ resource "aws_alb_target_group" "tf-demo-devops-tg" {
 
   health_check {
     path     = "/testApi"
-    protocol = "HTTP"
   }
 
   tags = {
@@ -130,7 +129,7 @@ resource "aws_alb_target_group" "tf-demo-devops-tg" {
 
 resource "aws_alb_target_group_attachment" "tf-demo-devops-alb-attach" {
   target_group_arn = aws_alb_target_group.tf-demo-devops-tg.arn
-#  port             = 80
+  port             = 8080
   target_id = aws_ecs_service.this.id
 }
 
@@ -144,6 +143,7 @@ resource "aws_ecs_service" "this" {
   network_configuration {
     security_groups = ["sg-01df6fa235527b451"]
     subnets = ["subnet-062f03f021c917c90", "subnet-07d0fb24f04e24e8d"]
+    assign_public_ip = true
   }
 
   load_balancer {
@@ -155,5 +155,3 @@ resource "aws_ecs_service" "this" {
   deployment_maximum_percent         = 100
   deployment_minimum_healthy_percent = 0
 }
-
-
